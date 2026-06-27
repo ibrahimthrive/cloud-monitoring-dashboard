@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Sign In - Cloud Monitor{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="card auth-card shadow">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <i class="bi bi-hdd-network display-4 text-primary"></i>
+                <h3 class="mt-2">Cloud Infrastructure Monitor</h3>
+                <p class="text-muted">Sign in to your account</p>
+            </div>
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                    {% for error in form.username.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                    {% for error in form.password.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                </div>
+                <div class="form-check mb-3">
+                    {{ form.remember_me(class="form-check-input") }}
+                    {{ form.remember_me.label(class="form-check-label") }}
+                </div>
+                {{ form.submit(class="btn btn-primary w-100") }}
+            </form>
+            <p class="text-center mt-3 mb-0">
+                No account? <a href="{{ url_for('auth.register') }}">Register here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

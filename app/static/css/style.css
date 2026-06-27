@@ -1,0 +1,61 @@
+:root {
+    --app-bg: #f4f6f9;
+    --card-bg: #ffffff;
+}
+
+[data-bs-theme="dark"] {
+    --app-bg: #11151c;
+    --card-bg: #1b2129;
+}
+
+body {
+    background-color: var(--app-bg);
+    transition: background-color 0.2s ease;
+}
+
+.app-navbar {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-bs-theme="dark"] .app-navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card {
+    background-color: var(--card-bg);
+}
+
+.metric-card h2 {
+    font-weight: 700;
+}
+
+.auth-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.flash-container .alert {
+    border-radius: 0.5rem;
+}
+
+#alertList .list-group-item,
+#alertHistoryList .list-group-item {
+    background-color: var(--card-bg);
+}
+
+.table {
+    color: inherit;
+}
+
+[data-bs-theme="dark"] .table {
+    --bs-table-bg: var(--card-bg);
+    --bs-table-color: #e7e9ec;
+}

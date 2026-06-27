@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    image: cloud-monitoring-dashboard:latest
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - instance_data:/app/instance
+      - logs_data:/app/logs
+    restart: unless-stopped
+
+volumes:
+  instance_data:
+  logs_data:

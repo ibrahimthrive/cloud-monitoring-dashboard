@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Alert Settings - Cloud Monitor{% endblock %}
+{% block content %}
+<h2 class="mb-3">Alert Settings</h2>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">Thresholds</div>
+            <div class="card-body">
+                {% if not current_user.is_admin %}
+                <div class="alert alert-info small">Only admins can change thresholds. Current values shown read-only.</div>
+                {% endif %}
+                <div class="mb-3">
+                    <label class="form-label">CPU Threshold (%)</label>
+                    <input type="number" class="form-control" id="cpuThreshold" min="0" max="100" {{ 'disabled' if not current_user.is_admin }}>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">RAM Threshold (%)</label>
+                    <input type="number" class="form-control" id="ramThreshold" min="0" max="100" {{ 'disabled' if not current_user.is_admin }}>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Disk Threshold (%)</label>
+                    <input type="number" class="form-control" id="diskThreshold" min="0" max="100" {{ 'disabled' if not current_user.is_admin }}>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="emailEnabled" {{ 'disabled' if not current_user.is_admin }}>
+                    <label class="form-check-label" for="emailEnabled">Send email notifications</label>
+                </div>
+                {% if current_user.is_admin %}
+                <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+                <span class="ms-2 small text-success d-none" id="saveSuccessMsg">Saved!</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">Alert History</div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="alertHistoryList">
+                    <li class="list-group-item text-muted">Loading...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

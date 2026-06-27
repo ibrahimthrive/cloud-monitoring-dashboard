@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Cloud Monitor{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="mb-0"><span id="hostnameLabel">Server</span></h2>
+        <small class="text-muted" id="osLabel">&nbsp;</small>
+    </div>
+    <div class="text-end">
+        <span class="badge text-bg-success" id="liveBadge"><i class="bi bi-broadcast"></i> Live</span>
+        <div class="text-muted small mt-1">Uptime: <span id="uptimeLabel">--</span></div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="card metric-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">CPU</span>
+                    <i class="bi bi-cpu text-primary"></i>
+                </div>
+                <h2 class="mt-2 mb-0" id="cpuValue">--%</h2>
+                <div class="progress mt-2" style="height:6px;">
+                    <div class="progress-bar bg-primary" id="cpuBar" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card metric-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">RAM</span>
+                    <i class="bi bi-memory text-success"></i>
+                </div>
+                <h2 class="mt-2 mb-0" id="ramValue">--%</h2>
+                <div class="progress mt-2" style="height:6px;">
+                    <div class="progress-bar bg-success" id="ramBar" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card metric-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Disk</span>
+                    <i class="bi bi-device-hdd text-warning"></i>
+                </div>
+                <h2 class="mt-2 mb-0" id="diskValue">--%</h2>
+                <div class="progress mt-2" style="height:6px;">
+                    <div class="progress-bar bg-warning" id="diskBar" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card metric-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Network</span>
+                    <i class="bi bi-router text-info"></i>
+                </div>
+                <h6 class="mt-2 mb-0"><i class="bi bi-arrow-up-short text-danger"></i> <span id="netUp">--</span> KB/s</h6>
+                <h6 class="mb-0"><i class="bi bi-arrow-down-short text-success"></i> <span id="netDown">--</span> KB/s</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">CPU &amp; RAM History</div>
+            <div class="card-body"><canvas id="cpuRamChart" height="220"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">Network Throughput (KB/s)</div>
+            <div class="card-body"><canvas id="networkChart" height="220"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">Disk Usage</div>
+            <div class="card-body"><canvas id="diskChart" height="220"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                Recent Alerts
+                <a href="{{ url_for('dashboard.settings') }}" class="small">Configure</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="alertList">
+                    <li class="list-group-item text-muted">No alerts yet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+    window.LIVE_REFRESH_INTERVAL_MS = {{ config.LIVE_REFRESH_INTERVAL_SECONDS * 1000 }};
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
