@@ -29,7 +29,7 @@ Under **Environment**, add the variables from `.env.example`. At minimum:
 
 Render injects `PORT` automatically — the app already reads `PORT` from the environment, and the Dockerfile's gunicorn `CMD` binds to `0.0.0.0:5000`. If Render assigns a different port, override the start command in the Render dashboard to:
 ```
-gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 run:app
+gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 run:app
 ```
 
 ## 4. Persistent storage for SQLite
