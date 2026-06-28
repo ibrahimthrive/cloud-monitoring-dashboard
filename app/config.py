@@ -11,12 +11,20 @@ def _bool(value, default=False):
     return str(value).strip().lower() in ("1", "true", "yes", "on")
 
 
+def _normalize_db_uri(uri):
+    # Render (and Heroku) hand out "postgres://" connection strings, but
+    # SQLAlchemy 1.4+ only recognizes the "postgresql://" scheme.
+    if uri.startswith("postgres://"):
+        return "postgresql://" + uri[len("postgres://"):]
+    return uri
+
+
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
+    SQLALCHEMY_DATABASE_URI = _normalize_db_uri(os.environ.get(
         "DATABASE_URL", f"sqlite:///{os.path.join(basedir, 'instance', 'monitoring.db')}"
-    )
+    ))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     PERMANENT_SESSION_LIFETIME = timedelta(hours=int(os.environ.get("SESSION_LIFETIME_HOURS", 12)))

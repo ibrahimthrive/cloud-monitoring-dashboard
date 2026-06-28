@@ -32,12 +32,16 @@ Render injects `PORT` automatically — the app already reads `PORT` from the en
 gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 run:app
 ```
 
-## 4. Persistent storage for SQLite
+## 4. Persistent storage: use Render Postgres
 
-SQLite data written to the container's filesystem is **not persisted** across deploys on Render's free tier. For real persistence:
+SQLite data written to the container's filesystem is **not persisted** across deploys or restarts on Render — registered users (including the admin account) disappear and logins start failing with "Invalid username or password" the moment the container recycles. This project now ships `psycopg2-binary` so it can talk to Postgres instead:
 
-- Add a **Render Disk** (paid plans) mounted at `/app/instance`, or
-- Point `DATABASE_URL` at a managed Postgres instance (Render offers free Postgres) and switch the SQLAlchemy driver to `psycopg2-binary` — the ORM layer in `app/models.py` requires no changes, only the connection string and an added dependency.
+1. In the Render dashboard, click **New > PostgreSQL** and create a free database.
+2. Once it's provisioned, copy the **Internal Database URL** (starts with `postgres://`).
+3. On the web service's **Environment** tab, set `DATABASE_URL` to that value. `app/config.py` automatically rewrites the `postgres://` scheme to `postgresql://` for SQLAlchemy.
+4. Redeploy. `db.create_all()` runs against Postgres on startup and creates the tables there; register the first account again to get a fresh admin.
+
+(A paid **Render Disk** mounted at `/app/instance` is an alternative if you want to keep SQLite, but Postgres is free and survives restarts without extra disk cost.)
 
 ## 5. Deploy
 
